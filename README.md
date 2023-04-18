@@ -35,7 +35,7 @@ Le modèle MVC (Modèle-Vue-Contrôleur) a été utilisé pour organiser le code
 
 - Modèle : 
 - Vue :
-- Contrôleur : 
+- Contrôleur : `Avancer.java` `Control.java` `Voler.java`
 
 ## Auteur
 Moi même.
