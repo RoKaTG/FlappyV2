@@ -1,6 +1,9 @@
 ## Description
 Le projet Flappy Bird Simplifié est une version simplifiée du célèbre jeu Flappy Bird, dans lequel le joueur doit éviter les obstacles en faisant voler ou descendre un oiseau en tapotant sur l'écran mobile. Notre version du jeu consiste à faire voler ou descendre un ovale représentant l'oiseau en cliquant avec la souris afin d'éviter de toucher une ligne brisée.
 
+## Note
+Se projet est une amélioration du `FlappyPPP` se trouvant sur mon github dans le repo du même nom,`FlappyPPP` est donc à ignorer.
+
 Le jeu a été implémenté en Java en utilisant la bibliothèque Swing pour l'interface graphique.
 
 ## Utilisation
