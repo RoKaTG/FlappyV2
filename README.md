@@ -34,7 +34,7 @@ java main
 Le modèle MVC (Modèle-Vue-Contrôleur) a été utilisé pour organiser le code. Les packages sont organisés de la manière suivante :
 
 - Modèle : `Etat.java` `Parcours.java`
-- Vue :
+- Vue : `Affichage.java`
 - Contrôleur : `Avancer.java` `Control.java` `Voler.java`
 
 ## Auteur
