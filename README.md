@@ -17,11 +17,11 @@ cd C:/CHEMIN
 ```
 - Compiler le code source en utilisant la commande :
 ```bash
-javac FlappyBirdSimplifie.java
+javac main.java
 ```
 - Lancer le jeu en utilisant la commande : 
 ```bash
-java FlappyBirdSimplifie
+java main
 ```
 
 ### Mode .jar exécutable
