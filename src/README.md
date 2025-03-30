@@ -48,7 +48,7 @@ où \(x\) est le signal d’entrée et \(h\) le filtre (ou réponse impulsionnel
 - Pour éliminer du bruit ou extraire certaines composantes fréquentielles, on peut aussi réaliser d’autres filtrages par convolution.
 
 **Remarque :**  
-En pratique, pour des raisons d’efficacité, on n’effectue pas forcément la convolution dans le domaine temporel, mais plutôt dans le domaine fréquentiel (via FFT). Dans du code C/C++/CUDA, vous trouverez parfois la démarche suivante :  
+En pratique, pour des raisons d’effica, on n’effectue pas forcément la convolution dans le domaine temporel, mais plutôt dans le domaine fréquentiel (via FFT). Dans du code C/C++/CUDA, vous trouverez parfois la démarche suivante :  
 1. On calcule la FFT du signal.  
 2. On calcule la FFT de la réponse impulsionnelle du filtre.  
 3. On multiplie les deux dans le domaine fréquentiel.  
@@ -183,13 +183,13 @@ Ces principes, combinés dans les chaînes de traitement radar, permettent d’o
 
 ---
 
-Voici un résumé synthétique des éléments clés présentés dans le document de thèse (section 5.2) concernant le traitement radar haute performance sur GPU, en mettant l’accent sur les notions de PC (Pulse Compression), DF (Doppler Filtering), convolution, FFT, logmod et le reste de la chaîne de traitement citeturn0file0.
+Voici un résumé synthétique des éléments clés présentés dans le document de thèse (section 5.2) concernant le traitement radar haute performance sur GPU, en mettant l’accent sur les notions de PC (Pulse Compression), DF (Doppler Filtering), convolution, FFT, logmod et le reste de la chaîne de traitement.
 
 ---
 
 ## 1. Contexte général : Traitement radar et haute performance GPU
 
-Le document souligne l’importance d’exécuter rapidement des algorithmes de traitement radar sur de grandes quantités de données, afin de traiter en temps quasi-réel les échos provenant des impulsions successives citeturn0file0. Les GPU (Unités de traitement graphique) se prêtent particulièrement bien à ce type de traitement massivement parallèle, car les opérations fréquentes (convolutions, FFT, filtrage Doppler…) peuvent être distribuées sur un grand nombre de cœurs.
+Le document souligne l’importance d’exécuter rapidement des algorithmes de traitement radar sur de grandes quantités de données, afin de traiter en temps quasi-réel les échos provenant des impulsions successives . Les GPU (Unités de traitement graphique) se prêtent particulièrement bien à ce type de traitement massivement parallèle, car les opérations fréquentes (convolutions, FFT, filtrage Doppler…) peuvent être distribuées sur un grand nombre de cœurs.
 
 ---
 
@@ -218,7 +218,7 @@ Le document souligne l’importance d’exécuter rapidement des algorithmes de 
 
 ## 4. Convolution et FFT dans la chaîne radar
 
-La **convolution** est un noyau central du traitement radar, en particulier pour la compression d’impulsion (matched filtering) et d’autres filtrages éventuels. Dans un mode « pipeline complet », on utilise souvent la FFT pour accélérer ces convolutions, et on retrouve plusieurs appels FFT/IFFT dans la chaîne (pour la PC, pour le DF, voire pour le pré-traitement ou post-traitement) citeturn0file0.
+La **convolution** est un noyau central du traitement radar, en particulier pour la compression d’impulsion (matched filtering) et d’autres filtrages éventuels. Dans un mode « pipeline complet », on utilise souvent la FFT pour accélérer ces convolutions, et on retrouve plusieurs appels FFT/IFFT dans la chaîne (pour la PC, pour le DF, voire pour le pré-traitement ou post-traitement) .
 
 **Optimisations GPU** :
 - Utilisation de librairies de FFT optimisées (cuFFT, etc.).  
@@ -253,7 +253,7 @@ Le document décrit un **pipeline complet** qui enchaîne :
 4. **CFAR**  
 5. (Éventuellement d’autres filtrages, détections, etc.)
 
-Afin de **réduire la latence** et d’**augmenter le débit**, on peut employer la technique de **kernel fusion** : au lieu de lancer un kernel GPU pour chaque étape séparément, on fusionne certaines étapes afin de limiter les transferts mémoire et maximiser l’occupation du GPU. Le document mentionne cette approche comme l’une des clés pour obtenir des temps de calcul compatibles avec les applications radar temps réel citeturn0file0.
+Afin de **réduire la latence** et d’**augmenter le débit**, on peut employer la technique de **kernel fusion** : au lieu de lancer un kernel GPU pour chaque étape séparément, on fusionne certaines étapes afin de limiter les transferts mémoire et maximiser l’occupation du GPU. Le document mentionne cette approche comme l’une des clés pour obtenir des temps de calcul compatibles avec les applications radar temps réel .
 
 ---
 
@@ -268,11 +268,11 @@ Afin de **réduire la latence** et d’**augmenter le débit**, on peut employer
 
 # Conclusion
 
-La section 5.2 de la thèse met en évidence la façon dont la **Pulse Compression**, le **Doppler Filtering**, la **convolution**, la **FFT**, le **LogMod** et le **CFAR** s’imbriquent dans une **chaîne de traitement radar** complète, tirant profit des GPU pour exécuter ces étapes de manière parallèle et efficace citeturn0file0. Les techniques de fusion de noyaux, de gestion optimisée de la mémoire et d’utilisation intensive de la FFT (via des bibliothèques spécialisées) sont au cœur des gains de performance pour le traitement temps réel ou quasi-temps réel.
+La section 5.2 de la thèse met en évidence la façon dont la **Pulse Compression**, le **Doppler Filtering**, la **convolution**, la **FFT**, le **LogMod** et le **CFAR** s’imbriquent dans une **chaîne de traitement radar** complète, tirant profit des GPU pour exécuter ces étapes de manière parallèle et efficace . Les techniques de fusion de noyaux, de gestion optimisée de la mémoire et d’utilisation intensive de la FFT (via des bibliothèques spécialisées) sont au cœur des gains de performance pour le traitement temps réel ou quasi-temps réel.
 
 ---
 
-Voici une version plus détaillée, avec quelques formules et explications mathématiques pour mieux comprendre chaque concept (pulse compression, Doppler filtering, convolution, FFT, logmod, etc.) dans le contexte radar et leur implémentation accélérée sur GPU citeturn0file0.
+Voici une version plus détaillée, avec quelques formules et explications mathématiques pour mieux comprendre chaque concept (pulse compression, Doppler filtering, convolution, FFT, logmod, etc.) dans le contexte radar et leur implémentation accélérée sur GPU .
 
 ---
 
@@ -435,7 +435,7 @@ Même si vous n’avez pas explicitement demandé, le document l’évoque comme
 
 ## 7. Pipeline radar complet (rappel)
 
-La section 5.2 de la thèse citeturn0file0 décrit un **pipeline** typique :
+La section 5.2 de la thèse  décrit un **pipeline** typique :
 
 1. **Lecture des données** (ou génération des signaux reçus).  
 2. **Pulse Compression** (via convolution ou corrélation).  
