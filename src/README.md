@@ -1,7 +1,4 @@
----
-
 ## 1. La Pulse Compression (PC)
-
 **Contexte :**  
 En radar, lorsqu’on émet une impulsion courte, on obtient une bonne résolution en distance (on peut « distinguer » des cibles proches). Mais émettre une impulsion très courte signifie émettre moins d’énergie, donc avoir une portée plus faible et un rapport signal-sur-bruit potentiellement moins bon.  
 Pour contourner cela, on peut émettre une impulsion *plus longue* (plus d’énergie), mais qu’on module (en fréquence ou en phase) afin qu’au moment de la réception, on applique un filtre adapté (une « compression » de l’impulsion). Cela permet de combiner l’avantage d’un signal de longue durée (plus d’énergie) et d’une impulsion « efficacement courte » après traitement (bonne résolution).
