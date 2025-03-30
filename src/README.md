@@ -425,7 +425,7 @@ Dans le traitement du signal radar, après avoir obtenu une **réponse complexe*
 
 ## 6. CFAR (Constant False Alarm Rate)
 
-Même si vous n’avez pas explicitement demandé, le document l’évoque comme faisant partie de la chaîne de traitement citeturn0file0.
+Même si vous n’avez pas explicitement demandé, le document l’évoque comme faisant partie de la chaîne de traitement.
 
 - **Idée** : Déterminer un **seuil de détection** qui s’adapte localement au niveau de bruit/clutter afin de maintenir un taux de fausses alarmes constant.  
 - **Processus** : On calcule une **statistique** sur un voisinage (moyenne, variance…), puis on compare la valeur courante à cette statistique multipliée par un facteur.  
