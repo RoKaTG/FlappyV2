@@ -1,58 +1,56 @@
-\section{FFT : Formulation et complexité}
-La transformée de Fourier discrète (DFT) d’une séquence \( x[n] \) de taille \( N \) est donnée par :
+\section{Convolution temporelle et fréquentielle}
+
+\subsection{Convolution discrète classique}
+La convolution d’un signal \( s[n] \) avec un filtre \( h[k] \) s’écrit :
 \begin{equation}
-X[k] = \sum_{n=0}^{N-1} x[n] \cdot e^{-j2\pi kn / N}
+y[n] = \sum_{k=0}^{M-1} s[n-k] \cdot h[k]
 \end{equation}
-Le calcul direct coûte \( \mathcal{O}(N^2) \). L’algorithme FFT de Cooley-Tukey réduit la complexité à \( \mathcal{O}(N \log N) \), en divisant la DFT en sous-DFT récursives.
+Complexité : \( \mathcal{O}(N_s \cdot M) \)
 
-\section{Modèle matriciel de la FFT}
-La FFT est exprimée comme une suite de multiplications matricielles et de produits élémentaires :
+\subsection{Convolution via le théorème de convolution (fréquentiel)}
+En transformant dans le domaine de Fourier :
 \begin{equation}
-X_{\text{out}} = F_{N_1} \cdot (T_{N_1N_2} \odot X_{\text{in}})
+y[n] = \text{FT}^{-1} \left( \text{FT}(h) \cdot \text{FT}(s) \right)
 \end{equation}
-où :
+La complexité devient \( \mathcal{O}(N \log N) \), où \( N \geq N_s + M - 1 \).
+
+\section{Méthode Overlap-and-Save (OLS)}
+
+\subsection{Principe}
+Le signal est découpé en segments qui se recouvrent. Chaque segment est traité indépendamment :
+
+\begin{enumerate}
+    \item Découpage du signal en segments de taille \( N \)
+    \item Application de la FFT
+    \item Multiplication élément par élément avec le filtre dans le domaine fréquentiel
+    \item Application de l’inverse FFT
+    \item Suppression des échantillons aliasés (de bord)
+    \item Fusion des segments nettoyés dans le signal de sortie
+\end{enumerate}
+
+Le nombre d’échantillons valides par segment est : 
+\[
+L = N - M + 1
+\]
+
+\section{Optimisation sur GPU}
+
+\subsection{Limites des bibliothèques standards}
+Les solutions cuFFT/cuDNN nécessitent des transferts mémoire coûteux entre mémoire globale et partagée. L’article propose d’exécuter l’intégralité de l’OLS en mémoire partagée.
+
+\subsection{Implémentation SM-OLS (Shared Memory OLS)}
+Deux variantes :
 \begin{itemize}
-    \item \( F_{N_1} \) : matrice DFT de taille \( N_1 \times N_1 \)
-    \item \( T_{N_1N_2} \) : matrice des twiddle factors
-    \item \( \odot \) : multiplication élément par élément
+    \item \textbf{C2C (complex-to-complex)} avec FFT de Cooley-Tukey (sans reordering)
+    \item \textbf{R2R (real-to-real)} avec FFT de Stockham (auto-sort)
 \end{itemize}
 
-\section{Optimisations sur Tensor Cores}
-\subsection{Limitations des APIs Tensor Core}
-Les Tensor Cores sont optimisés pour les produits matriciels de type GEMM. Cependant, les FFT nécessitent :
+Chaque bloc de threads GPU :
 \begin{itemize}
-    \item des multiplications élémentaires complexes
-    \item des accès non structurés aux matrices
+    \item lit un segment
+    \item applique une FFT en mémoire partagée
+    \item effectue les multiplications complexes
+    \item applique l’inverse FFT
+    \item supprime les zones aliasées
+    \item écrit la sortie filtrée
 \end{itemize}
-Les opérations standards \texttt{mma\_sync}, \texttt{load/store\_matrix\_sync} sont limitées pour cela.
-
-\subsection{Optimisation proposée}
-L’article introduit un mappage des fragments dans les registres pour accéder à des éléments individuels :
-\begin{itemize}
-    \item Fragmentation contrôlée : accès aux coefficients dans les fragments
-    \item Calcul des produits complexes et twiddles \textit{in situ}, sans accès mémoire partagé
-\end{itemize}
-
-\section{Architecture de tcFFT}
-\begin{itemize}
-    \item \textbf{Planification dynamique} : sélection de noyaux de fusion optimaux selon la taille
-    \item \textbf{Support de tous les FFT en puissance de 2} (jusqu’à \(2^{23}\))
-    \item \textbf{FFT 2D et batched FFT} avec accès mémoire stridés gérés efficacement
-\end{itemize}
-
-\section{Réduction du coût mémoire}
-\subsection{Fusion des processus de merging}
-Plusieurs étapes de merging sont combinées pour réduire les accès globaux mémoire.
-
-\subsection{Accès coalescés en mémoire}
-Réarrangement des données en mémoire pour permettre des accès alignés (in-place) avec tailles continues (jusqu’à 32) :
-\begin{itemize}
-    \item Permet de saturer la bande passante mémoire
-    \item Réduction du besoin de synchronisation inter-blocs
-\end{itemize}
-
-\section{Équation de performance}
-La performance est mesurée en TFLOPS (opérations flottantes par seconde) :
-\begin{equation}
-\text{TFLOPS} = \frac{6 \cdot 2 \cdot \log_2 N \cdot N \cdot N_{\text{batch}} \cdot R}{T_{\text{total}} \cdot 10^{12}}
-\end{equation}
